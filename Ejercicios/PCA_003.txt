@@ -1,0 +1,69 @@
+setwd("C:/Users/Nelson/Desktop/Curso Machine Learning/AFPCrecer/CursoEstudio/PCA/Ejercicios/")
+data <- read.table("WholesaleData.csv", header = TRUE, sep = ",", dec = ".",row.names=1) 
+attach(data)
+#Evaluando correlaciones
+cor(data)
+is.na(data)
+which(is.na(data))
+
+#Discretizacion Transformar una variable de tipo numerica a una de tipo categorica
+
+#Numerización
+
+#Normalizacion
+scale.data<-scale(data)
+?prcomp
+PCAdata<-prcomp(scale.data)
+summary(PCAdata)
+#Extraccion de los Valores de Desviacion Estandar
+DesvStd<-PCAdata[[1]]
+var<-DesvStd^2
+#Observar las varianzas y buscar cuales tienen var>1
+var
+
+#Extraccion de los componentes principales (Elemento Rotation)
+CP1<-PCAdata[[2]][,1]
+CP1
+
+CP2<-PCAdata[[2]][,2]
+CP2
+
+CP3<-PCAdata[[2]][,3]
+CP3
+
+#Haciendo un mismo arreglo
+PrinComp<-cbind(CP1,CP2,CP3)
+PrinComp
+
+install.packages("ade4")
+library("ade4")
+
+#Generando circulo de correlaciones (Veremos la correlacion entre los CP y las variables originales)
+s.corcircle(PrinComp)
+
+#Analizando CP1 y CP2
+x11()
+s.corcircle(PrinComp[,-3], sub="CP1 y CP2", possub="topright")
+
+#Extraccion de Individuos
+Indiv<-PCAdata$x[,1:3]
+Indiv
+head(Indiv)
+x11()
+s.label(Indiv[,-3],label=row.names(data),sub="Coordenadas de los Individuos", possub="topright")
+
+
+#Analizando CP1 y CP3
+x11()
+s.corcircle(PrinComp[,-2], sub="CP1 y CP3", possub="topright")
+
+x11()
+s.label(Indiv[,-2],label=row.names(data),sub="Coordenadas de los Individuos", possub="topright")
+
+
+#Analizando CP2 y CP3
+x11()
+s.corcircle(PrinComp[,-1], sub="CP2 y CP3", possub="topright")
+
+x11()
+s.label(Indiv[,-1],label=row.names(data),sub="Coordenadas de los Individuos", possub="topright")

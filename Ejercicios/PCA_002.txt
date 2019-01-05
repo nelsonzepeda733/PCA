@@ -1,0 +1,36 @@
+data("USArrests")
+head(USArrests)
+apply(X = USArrests, MARGIN = 2, FUN = mean)
+apply(X = USArrests, MARGIN = 2, FUN = var)
+pca <- prcomp(USArrests, scale = TRUE)
+names(pca)
+pca$center
+pca$scale
+pca$rotation
+head(pca$x)
+dim(pca$x)
+biplot(x = pca, scale = 0, cex = 0.6, col = c("blue4", "brown3"))
+pca$rotation <- -pca$rotation
+pca$x        <- -pca$x
+biplot(x = pca, scale = 0, cex = 0.6, col = c("blue4", "brown3"))
+library(ggplot2)
+pca$sdev^2
+prop_varianza <- pca$sdev^2 / sum(pca$sdev^2)
+prop_varianza
+ggplot(data = data.frame(prop_varianza, pc = 1:4),
+       aes(x = pc, y = prop_varianza)) +
+  geom_col(width = 0.3) +
+  scale_y_continuous(limits = c(0,1)) +
+  theme_bw() +
+  labs(x = "Componente principal",
+       y = "Prop. de varianza explicada")
+
+prop_varianza_acum <- cumsum(prop_varianza)
+prop_varianza_acum
+ggplot(data = data.frame(prop_varianza_acum, pc = 1:4),
+       aes(x = pc, y = prop_varianza_acum, group = 1)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  labs(x = "Componente principal",
+       y = "Prop. varianza explicada acumulada")	   
